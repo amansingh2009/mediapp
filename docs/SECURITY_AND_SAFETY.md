@@ -1,0 +1,7 @@
+# Security and medical safety
+
+Prescription photos and extracted text are sensitive. The app uses private Supabase Storage and user-scoped backup policies when configured. The API validates a Supabase bearer token in production and limits image size and dimensions; OCR logs counts, not image text. Never put service-role secrets in the Expo bundle. User photos are excluded from training and synthetic benchmark reports by default.
+
+Every OCR or model reading is unverified. The active parser leaves missing dosage, frequency, and duration empty. The app rejects reminder creation from incomplete scanned medicines and requires a user's comparison with the original prescription. A catalog match or general drug information does not prove the prescribed medicine. Drug-reference information is separate from patient-specific instructions. The model candidate and reconciliation module cannot automatically select a medicine or activate reminders.
+
+Current gaps: the Indian vision model is not independently evaluated, OCR names on the user's live page remain uncertain, the API is synchronous, and local development allows guest requests. Do not deploy the experimental path as a medical decision system. Before production, validate rate limiting across instances, retention/deletion policies, private storage access, audit logging without health data, clinician-reviewed error rates, and safe retry behavior.

@@ -1,0 +1,7 @@
+# Local run and deployment requirements
+
+Copy the documented variables from `backend/.env.example` and `mobile/.env.example`; keep actual keys outside Git. From `backend/`, install `requirements.txt` in a Python environment, obtain the ONNX weights using `download_models.py`, and run `python run.py` on port 8102. From `mobile/`, run `npm ci`, then `npm run web -- --port 8100` or an Expo native target. The mobile API URL must point to a reachable backend; a phone cannot use its own `127.0.0.1` to reach a computer.
+
+For research only, install `ai/requirements-vision.txt`, run `ai/inference/download_indian_qwen.py --confirm-7-52-gb-download` after approval, and compare using `python ai/evaluation/benchmark.py --reader indian` from the project root. Model files are Git-ignored. The current 16 GB Apple laptop has not run this 7.52 GB model; memory and latency may prevent local inference. Production deployment of that model needs a separately configured GPU host, performance tests, request isolation, and clinical evaluation. No paid GPU or production AI service has been configured.
+
+The current backend runs OCR synchronously under a one-request semaphore. It has no durable AI job queue, PDF processing, or GPU worker. These must be implemented before claiming production throughput. The existing Supabase migration in `backend/supabase/migrations/` creates private backup and photo storage with user-scoped policies; apply it only to the intended project after reviewing the SQL and existing schema.

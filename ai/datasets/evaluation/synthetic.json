@@ -1,0 +1,9 @@
+{
+  "purpose": "Smoke and regression testing only; not a clinical accuracy benchmark",
+  "source": "chinmays18/medical-prescription-dataset test split",
+  "cases": [
+    {"image": "prescription_00006.png", "medicines": [{"name": "Prednisone", "strength": "25 mg", "instruction": "After meals"}]},
+    {"image": "prescription_00025.png", "medicines": [{"name": "Metformin", "strength": "250 mg", "instruction": "After meals"}]},
+    {"image": "prescription_00027.png", "medicines": [{"name": "Acetaminophen", "strength": "250 mg", "instruction": "Before meals"}, {"name": "Losartan", "strength": "250 mg", "instruction": "After meals"}]}
+  ]
+}

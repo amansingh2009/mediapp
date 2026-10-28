@@ -1,0 +1,76 @@
+{
+  "dataset": "Smoke and regression testing only; not a clinical accuracy benchmark",
+  "reader": "ocr",
+  "backend": "/Users/amansingh/team/app/mediscan/backend",
+  "documents": 3,
+  "expected_medicines": 4,
+  "exact_name_matches": 1,
+  "name_precision": 0.25,
+  "name_recall": 0.25,
+  "name_f1": 0.25,
+  "results": [
+    {
+      "image": "prescription_00006.png",
+      "seconds": 0.468,
+      "expected": 1,
+      "predicted": 1,
+      "name_matches": 1,
+      "name_precision": 1.0,
+      "name_recall": 1.0,
+      "name_f1": 1.0,
+      "missed_names": [],
+      "unmatched_candidates": [],
+      "matched_fields": [
+        {
+          "name": "Prednisone",
+          "fields": {
+            "strength": true,
+            "instruction": false
+          }
+        }
+      ],
+      "cer": null,
+      "wer": null
+    },
+    {
+      "image": "prescription_00025.png",
+      "seconds": 0.146,
+      "expected": 1,
+      "predicted": 1,
+      "name_matches": 0,
+      "name_precision": 0.0,
+      "name_recall": 0.0,
+      "name_f1": 0.0,
+      "missed_names": [
+        "Metformin"
+      ],
+      "unmatched_candidates": [
+        "Meclformin"
+      ],
+      "matched_fields": [],
+      "cer": null,
+      "wer": null
+    },
+    {
+      "image": "prescription_00027.png",
+      "seconds": 0.152,
+      "expected": 2,
+      "predicted": 2,
+      "name_matches": 0,
+      "name_precision": 0.0,
+      "name_recall": 0.0,
+      "name_f1": 0.0,
+      "missed_names": [
+        "Acetaminophen",
+        "Losartan"
+      ],
+      "unmatched_candidates": [
+        "Accaminophcn",
+        "Losanan"
+      ],
+      "matched_fields": [],
+      "cer": null,
+      "wer": null
+    }
+  ]
+}

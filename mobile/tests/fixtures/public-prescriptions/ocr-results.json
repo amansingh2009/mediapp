@@ -1,0 +1,44 @@
+[
+  {
+    "sample": "prescription_00006.png",
+    "medicine_candidates": [],
+    "raw_text": "City Health Clinic\n45 Oak Ave.\nPregeriled by Ge C. Pegei\nGate: I4-19-V6\nPatent: /fisha flan, Ape -3\nPrchigene 75 my Alter mealy\nCgnature Dr C Pessi",
+    "model_words": 27
+  },
+  {
+    "sample": "prescription_00025.png",
+    "medicine_candidates": [
+      {
+        "name": "Melermin",
+        "strength": "290 mg",
+        "dosage": "",
+        "frequency": "",
+        "duration_days": null,
+        "instruction": "",
+        "original": "Melermin 290 mg fer meals",
+        "model": "aanma ao aet tae aa",
+        "printed": "Melermin 290 mg fer meals"
+      }
+    ],
+    "raw_text": "Greenwood Medical Center\n234 Maple Blvd.\nPresented by: Yr 4 Dome\nDae: 094-19-Ve\nPatient: Wee J. Aye AV\nMelermin 290 mg fer meals\npee Dr 4 Doey",
+    "model_words": 27
+  },
+  {
+    "sample": "prescription_00027.png",
+    "medicine_candidates": [
+      {
+        "name": "Aectaminephen",
+        "strength": "750 mg",
+        "dosage": "",
+        "frequency": "",
+        "duration_days": null,
+        "instruction": "",
+        "original": "Aectaminephen 750 mg Getere meals",
+        "model": "aeraaox aon raet efe ae",
+        "printed": "Aectaminephen 750 mg Getere meals"
+      }
+    ],
+    "raw_text": "City Health Clinic\n234 Maple Blvd.\nPregerled by: Dr th. fe\nDate: 094-V2-V\u00e9\nPatient: fire Fake, Hye: 37\nAectaminephen 750 mg Getere meals\necten 290 m9 Apier meals\nSpnayue DM ke",
+    "model_words": 31
+  }
+]

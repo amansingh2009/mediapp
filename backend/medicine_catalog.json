@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "brand": "Vertin",
+      "ingredient": "betahistine",
+      "strengths": ["8 mg", "16 mg", "24 mg"],
+      "source": "https://www.abbott.in/products/v.html"
+    },
+    {
+      "brand": "Ondem",
+      "ingredient": "ondansetron",
+      "strengths": ["4 mg", "8 mg"],
+      "source": "https://www.alkemlabs.com/pdf/adverse/ONDANSETRON%20MD%20TABLETS%204%2C8%20mg.pdf"
+    },
+    {
+      "brand": "Sompraz D",
+      "ingredient": "esomeprazole + domperidone",
+      "strengths": ["40 mg / 30 mg"],
+      "source": "https://sunpharma.com/india-products/"
+    }
+  ]
+}

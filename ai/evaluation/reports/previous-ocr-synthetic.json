@@ -1,0 +1,58 @@
+{
+  "dataset": "Smoke and regression testing only; not a clinical accuracy benchmark",
+  "backend": "/Users/amansingh/team/mediapp-backend",
+  "documents": 3,
+  "expected_medicines": 4,
+  "exact_name_matches": 1,
+  "name_recall": 0.25,
+  "results": [
+    {
+      "image": "prescription_00006.png",
+      "seconds": 0.703,
+      "expected": 1,
+      "predicted": 1,
+      "name_matches": 1,
+      "missed_names": [],
+      "unmatched_candidates": [],
+      "matched_fields": [
+        {
+          "name": "Prednisone",
+          "fields": {
+            "strength": true,
+            "instruction": false
+          }
+        }
+      ]
+    },
+    {
+      "image": "prescription_00025.png",
+      "seconds": 0.219,
+      "expected": 1,
+      "predicted": 1,
+      "name_matches": 0,
+      "missed_names": [
+        "Metformin"
+      ],
+      "unmatched_candidates": [
+        "Meclformin"
+      ],
+      "matched_fields": []
+    },
+    {
+      "image": "prescription_00027.png",
+      "seconds": 0.292,
+      "expected": 2,
+      "predicted": 2,
+      "name_matches": 0,
+      "missed_names": [
+        "Acetaminophen",
+        "Losartan"
+      ],
+      "unmatched_candidates": [
+        "Accaminophcn",
+        "Losanan"
+      ],
+      "matched_fields": []
+    }
+  ]
+}

@@ -1,0 +1,310 @@
+{
+  "status": "COMPLETED_EXPERIMENTAL",
+  "started_at": "2026-10-25T17:34:19.886463+00:00",
+  "source_sha256": "e70eba8c46dbf52982d77e8f46751ef36334934a6c55510b594779a21149a3e5",
+  "source": "/Users/amansingh/team/app/ai/model_registry/rxhandbd-crnn-v2/best.pt",
+  "dataset": "RxHandBD",
+  "dataset_url": "https://zenodo.org/records/18478741",
+  "seed": 73,
+  "device": "mps",
+  "splits": {
+    "train": 3794,
+    "test": 1115,
+    "validation": 669
+  },
+  "baseline_validation": {
+    "samples": 669,
+    "cer": 0.5140860449879886,
+    "wer": 0.9546044098573282,
+    "exact_match": 0.05829596412556054,
+    "examples": [
+      {
+        "reference": "ceevit",
+        "prediction": "celat"
+      },
+      {
+        "reference": "ace",
+        "prediction": "ie"
+      },
+      {
+        "reference": "capsule",
+        "prediction": "cea"
+      },
+      {
+        "reference": "ace power",
+        "prediction": "aas"
+      },
+      {
+        "reference": "fexo",
+        "prediction": "fexa"
+      },
+      {
+        "reference": "folzin-cl",
+        "prediction": "rono-d"
+      },
+      {
+        "reference": "omep",
+        "prediction": "cema"
+      },
+      {
+        "reference": "esprazo",
+        "prediction": "eprazo"
+      },
+      {
+        "reference": "xyrl 10",
+        "prediction": "ne  b"
+      },
+      {
+        "reference": "ostocal",
+        "prediction": "costcat"
+      },
+      {
+        "reference": "rofip",
+        "prediction": "rorer"
+      },
+      {
+        "reference": "normanal",
+        "prediction": "nepainat"
+      }
+    ]
+  },
+  "learning_rate": 0.0002,
+  "augmentation": "Gaussian pixel noise sigma=0.025 on training only",
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 1.3339830835660298,
+      "validation_cer": 0.5060056780956541,
+      "validation_exact_match": 0.059790732436472344,
+      "seconds": 4.632438667002134
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.3042591035366058,
+      "validation_cer": 0.5055689015068793,
+      "validation_exact_match": 0.05829596412556054,
+      "seconds": 3.303898207959719
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.2923269987106323,
+      "validation_cer": 0.5053505132124918,
+      "validation_exact_match": 0.07473841554559044,
+      "seconds": 3.288227166980505
+    },
+    {
+      "epoch": 4,
+      "train_loss": 1.2829180399576823,
+      "validation_cer": 0.5018563005022931,
+      "validation_exact_match": 0.07473841554559044,
+      "seconds": 3.2963051670230925
+    },
+    {
+      "epoch": 5,
+      "train_loss": 1.269255401690801,
+      "validation_cer": 0.5025114653854553,
+      "validation_exact_match": 0.07623318385650224,
+      "seconds": 3.3332290410762653
+    },
+    {
+      "epoch": 6,
+      "train_loss": 1.2609350522359213,
+      "validation_cer": 0.5003275824415812,
+      "validation_exact_match": 0.07174887892376682,
+      "seconds": 3.425250458996743
+    },
+    {
+      "epoch": 7,
+      "train_loss": 1.2515655755996704,
+      "validation_cer": 0.49727014632015726,
+      "validation_exact_match": 0.0687593423019432,
+      "seconds": 3.5166853339178488
+    },
+    {
+      "epoch": 8,
+      "train_loss": 1.2440893352031708,
+      "validation_cer": 0.5044769600349421,
+      "validation_exact_match": 0.07623318385650224,
+      "seconds": 3.2937961670104414
+    },
+    {
+      "epoch": 9,
+      "train_loss": 1.2273716260989507,
+      "validation_cer": 0.49727014632015726,
+      "validation_exact_match": 0.07922272047832586,
+      "seconds": 3.2412934580352157
+    },
+    {
+      "epoch": 10,
+      "train_loss": 1.2211540897687276,
+      "validation_cer": 0.49836208779209434,
+      "validation_exact_match": 0.07473841554559044,
+      "seconds": 3.258168541942723
+    },
+    {
+      "epoch": 11,
+      "train_loss": 1.2167071690162024,
+      "validation_cer": 0.49727014632015726,
+      "validation_exact_match": 0.08071748878923767,
+      "seconds": 3.3805714999325573
+    },
+    {
+      "epoch": 12,
+      "train_loss": 1.2024806261062622,
+      "validation_cer": 0.4957414282594453,
+      "validation_exact_match": 0.07772795216741404,
+      "seconds": 3.4218708750559017
+    },
+    {
+      "epoch": 13,
+      "train_loss": 1.1961547950903575,
+      "validation_cer": 0.4926839921380214,
+      "validation_exact_match": 0.08221225710014948,
+      "seconds": 3.313372957985848
+    },
+    {
+      "epoch": 14,
+      "train_loss": 1.186960948506991,
+      "validation_cer": 0.4979253112033195,
+      "validation_exact_match": 0.08370702541106129,
+      "seconds": 3.3313342499313876
+    },
+    {
+      "epoch": 15,
+      "train_loss": 1.1762902021408081,
+      "validation_cer": 0.4856955667176239,
+      "validation_exact_match": 0.08071748878923767,
+      "seconds": 3.4064023330574855
+    },
+    {
+      "epoch": 16,
+      "train_loss": 1.1695831934611003,
+      "validation_cer": 0.4913736623716969,
+      "validation_exact_match": 0.08520179372197309,
+      "seconds": 3.345997625030577
+    },
+    {
+      "epoch": 17,
+      "train_loss": 1.159755575656891,
+      "validation_cer": 0.48613234330639876,
+      "validation_exact_match": 0.09118086696562033,
+      "seconds": 3.3033570419065654
+    },
+    {
+      "epoch": 18,
+      "train_loss": 1.1517649432023367,
+      "validation_cer": 0.4854771784232365,
+      "validation_exact_match": 0.09118086696562033,
+      "seconds": 3.3485279160086066
+    },
+    {
+      "epoch": 19,
+      "train_loss": 1.1457427700360616,
+      "validation_cer": 0.4811094125354881,
+      "validation_exact_match": 0.08819133034379671,
+      "seconds": 3.406563707976602
+    },
+    {
+      "epoch": 20,
+      "train_loss": 1.1379447211821874,
+      "validation_cer": 0.47586809347019,
+      "validation_exact_match": 0.08520179372197309,
+      "seconds": 3.3283288329839706
+    },
+    {
+      "epoch": 21,
+      "train_loss": 1.1317214161157607,
+      "validation_cer": 0.47586809347019,
+      "validation_exact_match": 0.09267563527653214,
+      "seconds": 3.3517722920514643
+    },
+    {
+      "epoch": 22,
+      "train_loss": 1.1252679020166396,
+      "validation_cer": 0.4843852369512994,
+      "validation_exact_match": 0.08968609865470852,
+      "seconds": 3.3820921659935266
+    },
+    {
+      "epoch": 23,
+      "train_loss": 1.107012046376864,
+      "validation_cer": 0.486787508189561,
+      "validation_exact_match": 0.08669656203288491,
+      "seconds": 3.333165541989729
+    },
+    {
+      "epoch": 24,
+      "train_loss": 1.1062254726886749,
+      "validation_cer": 0.48482201354007426,
+      "validation_exact_match": 0.08819133034379671,
+      "seconds": 3.342719875043258
+    }
+  ],
+  "clinical_validation": false,
+  "best_validation_cer": 0.47586809347019,
+  "selected_epoch": 20,
+  "completed_at": "2026-10-25T17:35:41.541296+00:00",
+  "improved_validation": true,
+  "test": {
+    "samples": 1115,
+    "cer": 0.562320819112628,
+    "wer": 0.9668552950687146,
+    "exact_match": 0.051121076233183856,
+    "examples": [
+      {
+        "reference": "nexcital",
+        "prediction": "necie"
+      },
+      {
+        "reference": "inderen",
+        "prediction": "hidro"
+      },
+      {
+        "reference": "indever",
+        "prediction": "hidrin"
+      },
+      {
+        "reference": "losita",
+        "prediction": "hiita"
+      },
+      {
+        "reference": "rivotril",
+        "prediction": "rmrtaol"
+      },
+      {
+        "reference": "asynta",
+        "prediction": "alorta"
+      },
+      {
+        "reference": "napa",
+        "prediction": "napa"
+      },
+      {
+        "reference": "econate",
+        "prediction": "esoate"
+      },
+      {
+        "reference": "exeptim",
+        "prediction": "espttin"
+      },
+      {
+        "reference": "napa",
+        "prediction": "napo"
+      },
+      {
+        "reference": "kacin",
+        "prediction": "kicin"
+      },
+      {
+        "reference": "lubilay",
+        "prediction": "cafilox"
+      }
+    ]
+  },
+  "limitations": [
+    "Word crops only; full-page extraction is separately tested",
+    "Unknown writer independence",
+    "Test split was used in earlier evaluation",
+    "All decoded medicine details require human confirmation"
+  ]
+}

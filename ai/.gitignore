@@ -1,0 +1,11 @@
+.venv/
+data/raw/
+data/processed/
+model_registry/**/*.pt
+model_registry/**/*.onnx
+model_registry/**/model.safetensors
+model_registry/**/pytorch_model.bin
+model_registry/**/.cache/
+model_registry/indian-qwen-v1/
+__pycache__/
+.pytest_cache/

@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "rxhandbd",
+      "url": "https://zenodo.org/records/18478741",
+      "record_api": "https://zenodo.org/api/records/18478741",
+      "license": "MIT",
+      "archive": "RxHandBD.zip",
+      "md5": "c096859fcccb33655edaf34e4c1e7a06",
+      "examples": 5578,
+      "kind": "labeled prescription word crops",
+      "training_use": true,
+      "limitations": "No full-page regimen labels or writer identifiers"
+    },
+    {
+      "id": "synthetic-full-pages",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset",
+      "kind": "three local synthetic test pages",
+      "training_use": false,
+      "limitations": "Smoke tests only; verify original source license before wider reuse"
+    },
+    {
+      "id": "medocr-vision-dataset",
+      "url": "https://huggingface.co/datasets/naazimsnh02/medocr-vision-dataset",
+      "listed_license": "MIT",
+      "kind": "mixed image-text documents",
+      "training_use": false,
+      "limitations": "Public viewer includes non-prescription documents and possible identifying text; requires sample-level review"
+    },
+    {
+      "id": "ekacare-records-validation",
+      "url": "https://huggingface.co/datasets/ekacare/medical_records_parsing_validation_set",
+      "listed_license": "MIT",
+      "examples": 288,
+      "kind": "de-identified Indian prescriptions and lab reports with expert rubrics",
+      "training_use": false,
+      "access": "Hugging Face login and acceptance of repository conditions required",
+      "limitations": "Test-only split; mixed document types and publicly unavailable field labels"
+    },
+    {
+      "id": "mendeley-bilingual-prescriptions",
+      "url": "https://data.mendeley.com/datasets/tg2hm7n2bs/2",
+      "listed_license": "CC BY 4.0",
+      "examples": 1000,
+      "kind": "Bangladesh handwritten full prescriptions with Bangla/English annotations",
+      "training_use": false,
+      "limitations": "Independent external evaluation candidate; verify image redaction and field annotation before use"
+    }
+  ]
+}

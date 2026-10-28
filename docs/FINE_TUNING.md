@@ -1,0 +1,7 @@
+# Fine-tuning status
+
+The existing `ai/model_registry/trocr-rxhandbd-v1` is a prior **word-crop experiment**, not the active prescription reader. Its recorded RxHandBD test exact-word accuracy is 48.25% and CER is 26.35%. Writer IDs are unavailable and the test split was used in earlier local experiments, so this does not establish independent or clinical performance. The checkpoint should not be promoted for complete pages based on this score.
+
+No new Qwen fine-tuning was performed. The [Indian Qwen model](MODEL_SELECTION.md) has no verified baseline on an independent, clinician-labeled Indian full-prescription set; its 7.52 GB weights are not downloaded. The source dataset shown on its model card includes mixed document types. Fine-tuning on the existing RxHandBD word crops would not teach full-page dose, frequency, or duration extraction.
+
+Before training, acquire a legally permitted, de-identified full-page set with medicine, strength, dose, frequency, duration, and source-region labels. Split by prescription and writer/doctor where IDs exist. Freeze a test set before model selection. Compare OCR alone, Qwen alone, and a review-only reconciliation using `ai/evaluation/benchmark.py` on the same examples. Train only if validation exposes a specific improvement opportunity, with patient uploads excluded by default. Report training/validation curves, held-out errors, hallucinated fields, memory, and latency; retain the old reader unless the new one improves safety and accuracy.

@@ -1,0 +1,39 @@
+{
+  "source": "chinmays18/medical-prescription-dataset",
+  "type": "synthetic prescription test split",
+  "purpose": "OCR and UI testing only; doses are synthetic and are not treatment recommendations",
+  "license_reference": "https://github.com/JonSnow1807/Medical-Prescription-OCR/blob/main/LICENSE",
+  "training_use": false,
+  "files": [
+    {
+      "file": "prescription_00006.png",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/images/prescription_00006.png",
+      "sha256": "0b1dedd712eccd4bb980a3c6b3c811fdf4ce3cca0970632ea07430a1c1d256b5"
+    },
+    {
+      "file": "prescription_00006.json",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/annotations/prescription_00006.json",
+      "sha256": "bb2de02373ee680c6925f7183dba652900f1bb936469565b78a12cd62195a562"
+    },
+    {
+      "file": "prescription_00025.png",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/images/prescription_00025.png",
+      "sha256": "36a91cd6aa2e1a7bec63525a0fd87584d22262f29b1517ef3dd56a57b060b237"
+    },
+    {
+      "file": "prescription_00025.json",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/annotations/prescription_00025.json",
+      "sha256": "809a1abfc3d7bdb65a57f5697e95f8b27d396753cc5273946edc964c772a2377"
+    },
+    {
+      "file": "prescription_00027.png",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/images/prescription_00027.png",
+      "sha256": "a39de462706395366b33d30e30aeb558594db326248b1bcd3854084b9a2c3c2d"
+    },
+    {
+      "file": "prescription_00027.json",
+      "url": "https://huggingface.co/datasets/chinmays18/medical-prescription-dataset/resolve/main/test/annotations/prescription_00027.json",
+      "sha256": "337ab8164359c858216395bdd7f940731f569bffccde4d8f41ff75b95d85644e"
+    }
+  ]
+}

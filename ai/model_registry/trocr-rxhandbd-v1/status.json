@@ -1,0 +1,200 @@
+{
+  "status": "COMPLETED_EXPERIMENTAL",
+  "started_at": "2026-10-26T17:35:40.672263+00:00",
+  "source_model": "microsoft/trocr-small-handwritten",
+  "source_revision": "b4648cfa171985a6745f37ddd637e98c0da958ac",
+  "source_sha256": "1b83102cbc1520dee1c3937ac334da83da18cf4683d46ebd1bd4e93ebe584dd7",
+  "dataset": "RxHandBD",
+  "dataset_url": "https://zenodo.org/records/18478741",
+  "dataset_md5": "c096859fcccb33655edaf34e4c1e7a06",
+  "split_sizes": {
+    "train": 3794,
+    "test": 1115,
+    "validation": 669
+  },
+  "training_samples": 3794,
+  "validation_samples": 669,
+  "seed": 73,
+  "device": "mps",
+  "learning_rate": 2e-05,
+  "batch_size": 16,
+  "baseline_validation": {
+    "samples": 669,
+    "cer": 0.570867001528718,
+    "exact_match": 0.09118086696562033,
+    "examples": [
+      {
+        "reference": "ceevit",
+        "prediction": "deceiving"
+      },
+      {
+        "reference": "ace",
+        "prediction": "it was"
+      },
+      {
+        "reference": "capsule",
+        "prediction": "espsi"
+      },
+      {
+        "reference": "ace power",
+        "prediction": "accessory"
+      },
+      {
+        "reference": "fexo",
+        "prediction": "foxo"
+      },
+      {
+        "reference": "folzin-cl",
+        "prediction": "formalnce"
+      },
+      {
+        "reference": "omep",
+        "prediction": "ormp"
+      },
+      {
+        "reference": "esprazo",
+        "prediction": "espsato"
+      },
+      {
+        "reference": "xyrl 10",
+        "prediction": "xxvi to"
+      },
+      {
+        "reference": "ostocal",
+        "prediction": "ostraced"
+      },
+      {
+        "reference": "rofip",
+        "prediction": "police"
+      },
+      {
+        "reference": "normanal",
+        "prediction": "incremental"
+      }
+    ]
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "training_loss": 1.6314345381590498,
+      "validation_cer": 0.19873334789255295,
+      "validation_exact_match": 0.4633781763826607,
+      "seconds": 352.5
+    },
+    {
+      "epoch": 2,
+      "training_loss": 0.674755872047248,
+      "validation_cer": 0.1487224284778336,
+      "validation_exact_match": 0.5874439461883408,
+      "seconds": 399.1
+    },
+    {
+      "epoch": 3,
+      "training_loss": 0.47252438008832204,
+      "validation_cer": 0.14653854553395937,
+      "validation_exact_match": 0.6023916292974589,
+      "seconds": 718.6
+    },
+    {
+      "epoch": 4,
+      "training_loss": 0.37529042316209366,
+      "validation_cer": 0.12601004586154183,
+      "validation_exact_match": 0.6502242152466368,
+      "seconds": 883.0
+    },
+    {
+      "epoch": 5,
+      "training_loss": 0.2984703036823443,
+      "validation_cer": 0.1279755405110286,
+      "validation_exact_match": 0.6322869955156951,
+      "seconds": 1082.6
+    },
+    {
+      "epoch": 6,
+      "training_loss": 0.254985027954358,
+      "validation_cer": 0.1445730508844726,
+      "validation_exact_match": 0.600896860986547,
+      "seconds": 1362.7
+    },
+    {
+      "epoch": 7,
+      "training_loss": 0.20824858514952058,
+      "validation_cer": 0.1194583970299192,
+      "validation_exact_match": 0.6547085201793722,
+      "seconds": 1025.0
+    },
+    {
+      "epoch": 8,
+      "training_loss": 0.1795463340842173,
+      "validation_cer": 0.1246997160952173,
+      "validation_exact_match": 0.6442451420029895,
+      "seconds": 875.3
+    }
+  ],
+  "selected_epoch": 7,
+  "best_validation_cer": 0.1194583970299192,
+  "clinical_validation": false,
+  "deployed": false,
+  "test": {
+    "samples": 1115,
+    "cer": 0.26348122866894197,
+    "exact_match": 0.48251121076233183,
+    "examples": [
+      {
+        "reference": "nexcital",
+        "prediction": "nexixne"
+      },
+      {
+        "reference": "inderen",
+        "prediction": "indoor"
+      },
+      {
+        "reference": "indever",
+        "prediction": "indever"
+      },
+      {
+        "reference": "losita",
+        "prediction": "losita"
+      },
+      {
+        "reference": "rivotril",
+        "prediction": "rivotril"
+      },
+      {
+        "reference": "asynta",
+        "prediction": "asynta"
+      },
+      {
+        "reference": "napa",
+        "prediction": "napa"
+      },
+      {
+        "reference": "econate",
+        "prediction": "econate"
+      },
+      {
+        "reference": "exeptim",
+        "prediction": "exception"
+      },
+      {
+        "reference": "napa",
+        "prediction": "napa"
+      },
+      {
+        "reference": "kacin",
+        "prediction": "kacin"
+      },
+      {
+        "reference": "lubilay",
+        "prediction": "lautilax"
+      }
+    ]
+  },
+  "completed_at": "2026-10-26T20:29:52.380940+00:00",
+  "limitations": [
+    "Word crops only; full-page extraction is not measured by this benchmark",
+    "Writer and patient IDs are absent; writer-independent accuracy is unknown",
+    "The source test split was evaluated in prior local experiments",
+    "No clinical validation; decoded medication must be confirmed by a clinician"
+  ]
+}

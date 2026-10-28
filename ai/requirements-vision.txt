@@ -1,0 +1,6 @@
+torch==2.14.1
+transformers==5.20.2
+huggingface_hub==2.3.0
+accelerate==1.15.0
+safetensors==0.8.0
+Pillow==13.0.0
