@@ -1,0 +1,14 @@
+{
+  "name": "mediscan",
+  "version": "1.0.0",
+  "description": "AI-Powered Prescription Decoder & Smart Medication Companion",
+  "private": true,
+  "scripts": {
+    "start": "./start.sh",
+    "backend": "cd backend && python run.py",
+    "mobile": "cd mobile && npx expo start --port 8100",
+    "test": "cd mobile && node tests/domain.test.cjs",
+    "test:e2e": "cd mobile && npx playwright test tests/browser/prescription.spec.ts"
+  }
+}
+

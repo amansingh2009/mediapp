@@ -86,11 +86,13 @@ test("generate README screenshots", async ({ page }) => {
     .getByRole("button", { name: "Medicine details: Cetirizine", exact: true })
     .click();
   await expect(page.getByText("High Confidence Extraction")).toBeVisible();
+  await page.waitForTimeout(500); // Allow drawer slide-in animation to completely settle
   await page.screenshot({ path: path.join(screenshotsDir, "03-clinical-details.png") });
 
   // 4. Add/Edit Reminder Sheet
   await page.getByRole("button", { name: "Set Medicine Reminder", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Add reminder" })).toBeVisible();
+  await page.waitForTimeout(600); // Allow sheet slide-in transition to completely finish without motion blur
   await page.screenshot({ path: path.join(screenshotsDir, "04-reminder-schedule.png") });
 
   // 5. Save Reminder & Today Timeline

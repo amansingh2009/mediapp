@@ -50,26 +50,18 @@ Handwritten prescriptions remain a dangerous, multi-billion-dollar bottleneck in
 
 ---
 
-## ⚡ Core Features
+## ✨ Core Features
 
-* **🔬 Multi-Modal AI Prescription Parsing**: Powered by Google Gemini (`gemini-3-flash-preview` / `gemini-3.5-flash`) with constrained schema decoding to transcribe drug names, strengths, dosages, and instructions without hallucination.
-* **📑 Interactive Clinical Intelligence Drawer**:
-  * **Extraction Confidence**: Visual confidence score badge (e.g. `High Confidence Extraction · 97%`).
-  * **4-Grid Metrics**: Quick view of **Dosage**, **Frequency** (`3 Times/day`), **Meal Timing** (`After meals`), and **Duration** (`7 days (generally)`).
-  * **What Is This Used For?**: Plain-language clinical indications written for patients.
-  * **Active Ingredients & Composition**: Pharmacological salt breakdown with exact strengths.
-  * **Mild vs. Emergency Effects**: Differentiates mild reactions (drowsiness, dry mouth) from critical red flags.
-  * **Generic Substitutes**: Matches active salts to affordable bioequivalent generics (e.g., PMBJP Jan Aushadhi).
-* **⏰ Medication Scheduling & Safety**:
-  * **Frequency-Locked Slots**: Prevents arbitrary dose multiplication (e.g., 3 Times/day provides exactly 3 slots).
-  * **Anchored Safety Windows**: Constrains reminder adjustments within 2 hours of physician instructions.
-  * **Timeline Actions**: Interactive **Mark Taken**, **Snooze (10m)**, and **Undo** buttons.
-* **🏥 GPS Hospital & Emergency Finder**:
-  * Automatically detects current city/coordinates and queries Google Places.
-  * Filters by **Government / Public Hospital**, **Clinic**, or **24/7 Emergency Care** with one-tap Google Maps directions and direct calls.
-* **🔒 Offline First & Private**:
-  * Works 100% offline using local SQLite / device storage for ongoing daily schedules.
-  * Optional encrypted Supabase cloud synchronization across mobile devices.
+| Feature | What It Does |
+|:---|:---|
+| 🔬 **AI Prescription OCR** | Transcribes handwritten cursive into structured medicine names, strengths, and dosages using Google Gemini Vision. |
+| 💊 **Standardized Frequencies** | Converts shorthand (`TDS`, `BD`, `1-0-1`, `HS`) into clean **`3 Times/day`**, **`2 Times/day`**, or **`At bedtime`**. |
+| 📑 **Clinical Intelligence** | Bottom-sheet drawer explaining **Uses**, **Active Composition**, **Mild vs. Emergency Effects**, and **Precautions**. |
+| 🏷️ **Generic Alternatives** | Recommends bioequivalent low-cost generics (e.g. PMBJP Jan Aushadhi) matched by active chemical salts. |
+| ⏰ **Locked Safety Reminders** | Daily reminder slots locked to prescription frequency with anchored 2-hour safety adjustment limits. |
+| 📅 **Adherence Timeline** | Daily timeline to track scheduled doses with one-tap **Mark Taken**, **Snooze (10m)**, and **Undo**. |
+| 🏥 **Nearby Emergency Care** | Live GPS finder for verified **Government / Public hospitals**, 24/7 emergency rooms, and pharmacies. |
+| 🔒 **100% Offline First** | Full local storage persistence — reminders and daily schedules work seamlessly without internet. |
 
 ---
 
@@ -122,6 +114,8 @@ sequenceDiagram
 
 ```
 mediscan/
+├── start.sh                       # 🚀 One-command system startup script (starts backend + frontend)
+├── package.json                   # Root scripts & automation configuration
 ├── mobile/                        # React Native / Expo Frontend Application
 │   ├── src/
 │   │   ├── app/                   # Expo Router file-based screens
@@ -150,7 +144,7 @@ mediscan/
 │   └── test_backend.py            # Pytest backend API verification suite
 │
 ├── docs/                          # Project Documentation & Assets
-│   ├── screenshots/               # App preview screenshots (01 to 06)
+│   ├── screenshots/               # Crystal-clear app preview screenshots (01 to 06)
 │   ├── AI_ARCHITECTURE.md         # Multi-modal AI vision model architecture
 │   └── SECURITY_AND_SAFETY.md     # Patient privacy & clinical non-fabrication policies
 │
@@ -164,73 +158,75 @@ mediscan/
 ### 📋 Prerequisites
 * **Node.js**: `v20+` (`node -v`)
 * **Python**: `3.10+` (`python3 --version`)
-* **Gemini API Key**: Free key from [Google AI Studio](https://aistudio.google.com/)
+* **Gemini API Key**: Free API key from [Google AI Studio](https://aistudio.google.com/)
 
 ---
 
-### Step 1: Launch the Backend (FastAPI)
+### ⚡ Option A: One-Command Start (Recommended)
+
+Run the included automated startup script from the root folder:
 
 ```bash
-# 1. Open a terminal and enter backend/
+./start.sh
+# or:
+npm start
+```
+
+This single command automatically:
+1. Verifies Python virtualenv, Node dependencies, and `GEMINI_API_KEY`.
+2. Detects your computer's local Wi-Fi LAN IP (for phone connectivity).
+3. Checks network ports (`8102` and `8100`) and frees stale connections.
+4. Boots the **FastAPI Backend** and waits for its health check (`http://127.0.0.1:8102/health`).
+5. Launches the **Expo Metro Bundler** with an interactive console and terminal QR code.
+6. Handles single-command clean exit (`Ctrl + C`) for both services.
+
+---
+
+### 🛠️ Option B: Manual Terminal Launch
+
+<details>
+<summary><b>Click to expand manual 2-terminal startup steps</b></summary>
+
+#### Step 1: Start Backend (Terminal 1)
+```bash
 cd backend
-
-# 2. Create virtual environment & activate
 python3 -m venv .venv
-source .venv/bin/activate       # On Windows: .venv\Scripts\activate
-
-# 3. Install dependencies
+source .venv/bin/activate       # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-
-# 4. Set your Gemini API key in .env
-cp .env.example .env
-# Edit .env and set: GEMINI_API_KEY=your_gemini_key_here
-
-# 5. Start the backend
+cp .env.example .env            # Add your GEMINI_API_KEY
 python run.py
 ```
-> Backend runs at: **`http://127.0.0.1:8102`** (Verify: `curl http://127.0.0.1:8102/health`)
+> Running at: `http://127.0.0.1:8102` (Health: `curl http://127.0.0.1:8102/health`)
 
----
-
-### Step 2: Launch the Mobile App (Expo / React Native)
-
+#### Step 2: Start Mobile App (Terminal 2)
 ```bash
-# 1. Open a second terminal and enter mobile/
 cd mobile
-
-# 2. Install dependencies
 npm install
-
-# 3. Configure backend URL
 echo "EXPO_PUBLIC_API_URL=http://localhost:8102" > .env
-
-# 4. Start Expo development server
 npm run start
 ```
+Press **`w`** in the terminal to open immediately in your web browser!
 
-Press **`w`** in the terminal to open the app instantly in your web browser!
+</details>
 
 ---
 
-### 📲 Step 3: Run on Your Physical Mobile Phone
+### 📲 Running on Your Physical Mobile Phone
 
-#### Option A: Expo Go (Instant · 30 Seconds · Zero Build Required)
+#### Method 1: Expo Go (Instant · 30 Seconds · Zero Build Required)
 1. Install **Expo Go** from [Google Play Store](https://play.google.com/store/apps/details?id=host.exp.exponent) or [iOS App Store](https://apps.apple.com/app/expo-go/id982107779).
-2. Connect your smartphone to the **same Wi-Fi network** as your laptop.
-3. Update `mobile/.env` with your laptop's local LAN IP:
-   ```env
-   EXPO_PUBLIC_API_URL=http://192.168.1.15:8102
-   ```
-4. Start Expo (`npm run start`) and scan the terminal QR code using **Expo Go** (Android) or the native **Camera** app (iOS).
+2. Connect your smartphone to the **same Wi-Fi network** as your computer.
+3. Start the project using `./start.sh` (which auto-detects your LAN IP, e.g. `172.17.17.189`).
+4. Scan the terminal QR code using **Expo Go** (Android) or the native **Camera** app (iOS).
 
-#### Option B: Standalone Android APK (`.apk`)
+#### Method 2: Standalone Android APK (`.apk`)
 ```bash
 cd mobile
 npm install -g eas-cli
 eas login
 npm run build:apk
 ```
-EAS builds a standalone native APK in the cloud and provides a direct download link to install on any Android phone.
+EAS compiles a standalone native APK in the cloud and outputs a direct download link for any Android phone.
 
 ---
 
@@ -238,10 +234,10 @@ EAS builds a standalone native APK in the cloud and provides a direct download l
 
 ```bash
 # 1. Run domain unit tests (Dose math, time window safety, status state machine)
-cd mobile && node tests/domain.test.cjs
+npm test
 
 # 2. Run automated browser E2E tests (10 full-flow Playwright scenarios)
-cd mobile && npx playwright test tests/browser/prescription.spec.ts
+npm run test:e2e
 
 # 3. TypeScript validation
 cd mobile && npx tsc --noEmit
