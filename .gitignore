@@ -1,20 +1,62 @@
-.DS_Store
+# ==========================================
+# MediScan Local Workspace .gitignore
+# ==========================================
+
+# AI Datasets & Models
+ai/
+**/ai/
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Python Virtual Environments & Bytecode
+.venv/
+**/.venv/
+venv/
+**/venv/
+__pycache__/
+**/__pycache__/
+.pytest_cache/
+**/.pytest_cache/
+*.py[cod]
+*$py.class
+
+# Environment Variables & Secrets
 .env
+**/.env
 .env.*
 !.env.example
-node_modules/
-.expo/
-dist/
-.venv/
-venv/
-__pycache__/
-.pytest_cache/
-*.py[cod]
-test-results/
+*.env.local
 
-backend/.env
-backend/node_modules
-backend/uploads
-frontend/.env
-frontend/node_modules
-frontend/uploads  
+# Expo & Web Bundles
+.expo/
+**/.expo/
+dist/
+**/dist/
+web-build/
+**/web-build/
+
+# Native Mobile Folders
+android/
+ios/
+mobile/android/
+mobile/ios/
+
+# Databases & Cache
+*.db
+*.sqlite
+*.sqlite3
+.cache/
+**/.cache/
+uploads/
+**/uploads/
+
+# Test Reports
+test-results/
+playwright-report/
+
+# OS Artifacts
+.DS_Store
+**/.DS_Store
+Thumbs.db

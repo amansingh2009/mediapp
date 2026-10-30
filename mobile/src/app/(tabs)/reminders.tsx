@@ -60,9 +60,24 @@ export default function Reminders() {
                   {item.times.join(" · ")}
                 </Text>
                 <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-                  <Fact label={t("dosage")} value={item.dosage || t("missing")} />
-                  <Fact label={t("frequency")} value={med.frequency ? compactFrequency(med.frequency) : (item.times.length ? `${item.times.length} ${t("timesPerDayShort")}` : t("noFixedSchedule"))} />
-                  <Fact label={t("duration")} value={med.durationDays ? `${med.durationDays} ${t("days").toLowerCase()}` : t("missing")} />
+                  <Fact
+                    label={t("dosage")}
+                    value={item.dosage || "1 tablet"}
+                    hint={!item.dosage ? "(generally)" : undefined}
+                    hintColor="#0284C7"
+                  />
+                  <Fact
+                    label={t("frequency")}
+                    value={med.frequency ? compactFrequency(med.frequency) : (item.times.length ? `${item.times.length} Times/day` : t("noFixedSchedule"))}
+                    hint={!med.frequency ? "(generally)" : undefined}
+                    hintColor="#0284C7"
+                  />
+                  <Fact
+                    label={t("duration")}
+                    value={`${med.durationDays || 7} ${t("days").toLowerCase()}`}
+                    hint={!med.durationDays ? "(generally)" : undefined}
+                    hintColor="#0284C7"
+                  />
                 </View>
                 {!!med.instruction && <Text style={type.small}>{med.instruction}</Text>}
                 {!!item.food && <Text style={type.small}>{t(item.food)}</Text>}

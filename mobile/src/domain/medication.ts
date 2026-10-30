@@ -298,11 +298,11 @@ export function cloudData(data: Data): Data {
 export function suggestedTimes(frequency: string) {
   const f = frequency.toUpperCase();
   if (/PRN|SOS|AS NEEDED/.test(f)) return [];
-  if (/TID|TDS|THREE|1-1-1|MORNING.*AFTERNOON.*EVENING/.test(f)) return ["08:00", "14:00", "20:00"];
-  if (/BID|\bBD\b|TWICE|1-0-1|MORNING.*EVENING/.test(f)) return ["08:00", "20:00"];
+  if (/TID|TDS|THREE|\b3\b|3\s*TIMES|1-1-1|MORNING.*AFTERNOON.*EVENING/.test(f)) return ["08:00", "14:00", "20:00"];
+  if (/BID|\bBD\b|TWICE|\b2\b|2\s*TIMES|1-0-1|MORNING.*EVENING/.test(f)) return ["08:00", "20:00"];
   if (/HS|NIGHT|BEDTIME|0-0-1/.test(f)) return ["21:00"];
-  if (/QID|FOUR/.test(f)) return ["08:00", "12:00", "16:00", "20:00"];
+  if (/QID|FOUR|\b4\b|4\s*TIMES/.test(f)) return ["08:00", "12:00", "16:00", "20:00"];
   if (/IN THE AFTERNOON/.test(f)) return ["14:00"];
-  if (/\bOD\b|\bQD\b|ONCE|DAILY|1-0-0|IN THE MORNING/.test(f)) return ["08:00"];
+  if (/\bOD\b|\bQD\b|ONCE|\b1\b|1\s*TIME|DAILY|1-0-0|IN THE MORNING/.test(f)) return ["08:00"];
   return [];
 }

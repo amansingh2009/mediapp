@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Linking, Text, View } from "react-native";
+import { ActivityIndicator, Linking, Text, View } from "react-native";
 import * as Location from "expo-location";
 import { Clock3, MapPin, Navigation, Phone, Star } from "lucide-react-native";
 import {
@@ -283,7 +283,33 @@ export default function Hospitals() {
           </Card>
         ),
         empty:
-          searched && !busy ? <Empty title={t("noHospitals")} /> : undefined,
+          initializing || busy ? (
+            <View
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 44,
+                gap: 12,
+              }}
+            >
+              <ActivityIndicator size="large" color={color.blue} />
+              <Text style={[type.heading, { fontSize: 18, color: color.ink }]}>
+                {initializing
+                  ? "Searching nearby medical centers…"
+                  : t("findingLocation")}
+              </Text>
+              <Text
+                style={[
+                  type.small,
+                  { textAlign: "center", color: color.muted, maxWidth: 300 },
+                ]}
+              >
+                Finding nearest verified government hospitals, clinics, and emergency services…
+              </Text>
+            </View>
+          ) : searched ? (
+            <Empty title={t("noHospitals")} />
+          ) : undefined,
       }}
     >
       <Field
@@ -373,7 +399,36 @@ export default function Hospitals() {
         />
       </View>
       {!!error && <Notice warning>{error}</Notice>}
-      {initializing && <Text style={type.small}>{t("findingLocation")}</Text>}
+      {(initializing || busy) && (
+        <Card
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 12,
+            padding: 14,
+            backgroundColor: color.blueWash,
+            borderColor: color.blue,
+            borderWidth: 1,
+            borderRadius: 16,
+          }}
+        >
+          <ActivityIndicator size="small" color={color.blue} />
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={[type.label, { color: color.blue, fontSize: 15 }]}>
+              {busy === "location"
+                ? "Acquiring your location…"
+                : initializing
+                  ? `${t("findingLocation")} Searching nearby hospitals…`
+                  : `Searching hospitals in ${city || "selected area"}…`}
+            </Text>
+            <Text style={[type.small, { color: color.muted, fontSize: 12 }]}>
+              {initializing
+                ? "Automatically finding nearest verified medical centers & emergency care"
+                : "Fetching verified healthcare facilities"}
+            </Text>
+          </View>
+        </Card>
+      )}
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {(["all", "hospital", "clinic", "emergency"] as const).map((value) => (
           <Chip

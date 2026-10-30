@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Linking, Platform, ScrollView, Text, View } from "react-native";
+import { Linking, Platform, ScrollView, Text, TextInput, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   AlertTriangle,
@@ -59,11 +59,13 @@ export function Fact({
   value,
   icon,
   hint,
+  hintColor,
 }: {
   label: string;
   value: string;
   icon?: React.ReactNode;
   hint?: string;
+  hintColor?: string;
 }) {
   return (
     <View style={{ flex: 1, minWidth: 85, gap: 3 }}>
@@ -72,25 +74,57 @@ export function Fact({
         <Text style={type.small}>{label}</Text>
       </View>
       <Text style={[type.label, { fontSize: 16 }]}>{value}</Text>
-      {!!hint && <Text style={type.small}>{hint}</Text>}
+      {!!hint && (
+        <Text
+          style={[
+            type.small,
+            {
+              fontSize: 12,
+              lineHeight: 16,
+              color: hintColor || color.muted,
+              fontWeight: hintColor ? "700" : "500",
+            },
+          ]}
+        >
+          {hint}
+        </Text>
+      )}
     </View>
   );
 }
 
+export function formatCardFrequency(
+  frequency?: string,
+  generalFrequency?: string,
+): string {
+  const raw = (frequency || generalFrequency || "").trim();
+  if (!raw) return "";
+  const f = raw.toLowerCase();
+  if (/three times|3 times|tds|tid|1-1-1|three daily/.test(f)) {
+    return "3 Times/day";
+  }
+  if (/twice|2 times|bid|\bbd\b|1-0-1|twice daily/.test(f)) {
+    return "2 Times/day";
+  }
+  if (/four times|4 times|qid|four daily/.test(f)) {
+    return "4 Times/day";
+  }
+  if (/once|1 time|\bod\b|\bqd\b|1-0-0|0-0-1|bedtime|morning|once daily/.test(f)) {
+    return "1 Time/day";
+  }
+  if (/prn|sos|as needed/.test(f)) {
+    return "As needed";
+  }
+  const m = f.match(/^(\d+)\s*(?:times?|x)\s*(?:\/|\s*per\s*|\s*a\s*)day$/);
+  if (m) {
+    const count = m[1];
+    return `${count} ${count === "1" ? "Time" : "Times"}/day`;
+  }
+  return raw;
+}
+
 export function compactFrequency(value: string) {
-  const normalized = value.trim().toLowerCase();
-  const counts: Record<string, string> = {
-    "once daily": "1 time/day",
-    "twice daily": "2 times/day",
-    "three times daily": "3 times/day",
-    "four times daily": "4 times/day",
-    "at bedtime": "1 time/day",
-    "in the morning": "1 time/day",
-    "in the afternoon": "1 time/day",
-    "morning and evening": "2 times/day",
-    "morning, afternoon and evening": "3 times/day",
-  };
-  return counts[normalized] || value;
+  return formatCardFrequency(value);
 }
 
 function frequencyFromGeneral(text?: string) {
@@ -144,27 +178,51 @@ function TimePickerField({
   const [open, setOpen] = useState(false);
   return (
     <View style={{ gap: 8 }}>
-      <Tap
-        label={`${label}: ${value}`}
-        expanded={open}
-        onPress={() => setOpen((current) => !current)}
-        style={{
-          minHeight: 56,
-          borderWidth: 1,
-          borderColor: open ? color.blue : color.border,
-          borderRadius: 16,
-          paddingHorizontal: 14,
-          backgroundColor: color.paper,
-        }}
-      >
-        <View style={type.between}>
-          <View style={type.row}>
-            <Clock3 size={19} color={color.blue} />
-            <Text style={type.label}>{label}</Text>
+      <View style={[type.row, { gap: 8 }]}>
+        <TextInput
+          accessibilityLabel={label}
+          value={value}
+          onChangeText={onChange}
+          placeholder="08:00"
+          maxLength={5}
+          style={{
+            height: 52,
+            width: 90,
+            borderRadius: 14,
+            borderWidth: 1,
+            borderColor: color.border,
+            backgroundColor: color.paper,
+            paddingHorizontal: 8,
+            fontSize: 16,
+            fontWeight: "700",
+            color: color.blue,
+            textAlign: "center",
+          }}
+        />
+        <Tap
+          label={`${label}: ${value}`}
+          expanded={open}
+          onPress={() => setOpen((current) => !current)}
+          style={{
+            flex: 1,
+            minHeight: 52,
+            borderWidth: 1,
+            borderColor: open ? color.blue : color.border,
+            borderRadius: 14,
+            paddingHorizontal: 14,
+            backgroundColor: color.paper,
+            justifyContent: "center",
+          }}
+        >
+          <View style={type.between}>
+            <View style={type.row}>
+              <Clock3 size={19} color={color.blue} />
+              <Text style={type.label}>{label}</Text>
+            </View>
+            <Text style={[type.heading, { color: color.blue, fontSize: 16 }]}>{value}</Text>
           </View>
-          <Text style={[type.heading, { color: color.blue }]}>{value}</Text>
-        </View>
-      </Tap>
+        </Tap>
+      </View>
       {open && Platform.OS !== "web" && (
         <DateTimePicker
           value={dateAtTime(value)}
@@ -256,6 +314,22 @@ export function MedicineCard({
     (r) => r.medicineId === medicine.id && !r.deleted,
   );
   const profile = data.profiles.find((p) => p.id === medicine.profileId);
+  const clinical = getClinicalProfile(
+    medicine.name,
+    medicine.strength,
+    currentMedicine.info,
+    prediction,
+  );
+  const effectiveDosage = medicine.dosage || clinical.defaultDosage || "1 tablet";
+  const isGeneralDosage = !medicine.dosage;
+
+  const rawFrequency = medicine.frequency || generalFrequency || clinical.defaultFrequency || "1 Time/day";
+  const displayFrequency = formatCardFrequency(rawFrequency);
+  const isGeneralFrequency = !medicine.frequency;
+
+  const effectiveDurationDays = medicine.durationDays || clinical.defaultDurationDays || 7;
+  const isGeneralDuration = !medicine.durationDays;
+
   return (
     <View style={{ marginBottom: 12 }}>
       <Card style={{ padding: 13, gap: 9 }}>
@@ -298,19 +372,23 @@ export function MedicineCard({
             borderColor: color.border,
           }}
         >
-          <Fact label={t("dosage")} value={medicine.dosage || t("missing")} />
+          <Fact
+            label={t("dosage")}
+            value={effectiveDosage}
+            hint={isGeneralDosage ? "(generally)" : undefined}
+            hintColor="#0284C7"
+          />
           <Fact
             label={t("frequency")}
-            value={medicine.frequency || generalFrequency || t("missing")}
-            hint={!medicine.frequency && generalFrequency ? t("general") : undefined}
+            value={displayFrequency}
+            hint={isGeneralFrequency ? "(generally)" : undefined}
+            hintColor="#0284C7"
           />
           <Fact
             label={t("duration")}
-            value={
-              medicine.durationDays
-                ? `${medicine.durationDays} ${t("days").toLowerCase()}`
-                : t("missing")
-            }
+            value={`${effectiveDurationDays} ${t("days").toLowerCase()}`}
+            hint={isGeneralDuration ? "(generally)" : undefined}
+            hintColor="#0284C7"
           />
         </View>
         {!!medicine.instruction && (
@@ -503,10 +581,16 @@ type ClinicalProfile = {
   seriousEffects: string[];
   precautions: string[];
   equivalents: GenericEquivalent[];
+  defaultDosage?: string;
+  defaultFrequency?: string;
+  defaultDurationDays?: number;
 };
 
 const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
   cetirizine: {
+    defaultDosage: "1 tablet",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 7,
     uses: "An antihistamine used for allergy relief (sneezing, runny nose, watery eyes, itching, and hives).",
     ingredients: ["Cetirizine Dihydrochloride (10 mg)"],
     commonEffects: ["Drowsiness", "Mild dizziness", "Dry mouth"],
@@ -551,6 +635,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   vertin: {
+    defaultDosage: "16 mg",
+    defaultFrequency: "3 Times/day",
+    defaultDurationDays: 10,
     uses: "Used to treat symptoms of Meniere's disease and inner ear vestibular disorders such as vertigo (dizziness), ringing in the ears (tinnitus), and nausea.",
     ingredients: ["Betahistine Dihydrochloride (16 mg)"],
     commonEffects: ["Mild nausea", "Indigestion / dyspepsia", "Headache"],
@@ -595,6 +682,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   sompraz: {
+    defaultDosage: "40 mg",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 10,
     uses: "A proton-pump inhibitor combination used to treat gastroesophageal reflux disease (GERD), acid reflux, heartburn, and dyspepsia.",
     ingredients: ["Esomeprazole (40 mg) + Domperidone (30 mg)"],
     commonEffects: ["Headache", "Dry mouth", "Mild diarrhea or abdominal discomfort"],
@@ -639,6 +729,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   ondem: {
+    defaultDosage: "4 mg",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 3,
     uses: "A 5-HT3 receptor antagonist antiemetic used to prevent and control nausea and vomiting caused by gastroenteritis or medications.",
     ingredients: ["Ondansetron Hydrochloride (4 mg)"],
     commonEffects: ["Headache", "Constipation", "Mild warmth or flushing sensation"],
@@ -683,6 +776,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   nexito: {
+    defaultDosage: "5 mg",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 10,
     uses: "A selective serotonin reuptake inhibitor (SSRI) used for the treatment of depression, generalized anxiety disorder (GAD), and panic disorders.",
     ingredients: ["Escitalopram Oxalate (5 mg)"],
     commonEffects: ["Mild nausea", "Insomnia or drowsiness", "Increased sweating"],
@@ -727,6 +823,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   jupiros: {
+    defaultDosage: "10 mg",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 30,
     uses: "A statin and cholesterol absorption inhibitor combination used to reduce LDL bad cholesterol and triglycerides and lower cardiovascular risks.",
     ingredients: ["Rosuvastatin (10 mg) + Ezetimibe (10 mg)"],
     commonEffects: ["Mild muscle aches", "Headache", "Abdominal discomfort"],
@@ -763,6 +862,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   amphojel: {
+    defaultDosage: "5 ml",
+    defaultFrequency: "3 Times/day",
+    defaultDurationDays: 7,
     uses: "An antacid used to neutralize excess stomach acid and relieve symptoms of heartburn, sour stomach, and acid indigestion.",
     ingredients: ["Aluminum Hydroxide Gel (320 mg / 5ml)"],
     commonEffects: ["Constipation", "Chalky taste", "Mild loss of appetite"],
@@ -799,6 +901,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   belladonna: {
+    defaultDosage: "15 ml",
+    defaultFrequency: "3 Times/day",
+    defaultDurationDays: 7,
     uses: "An anticholinergic antispasmodic used to relieve gastrointestinal spasms, stomach cramps, and irritable bowel symptoms.",
     ingredients: ["Belladonna Tincture (Alkaloids)"],
     commonEffects: ["Dry mouth", "Blurred vision", "Flushing or decreased sweating"],
@@ -828,6 +933,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   paracetamol: {
+    defaultDosage: "500 mg",
+    defaultFrequency: "2 Times/day",
+    defaultDurationDays: 3,
     uses: "An analgesic and antipyretic used for pain relief (headaches, muscular aches) and fever reduction.",
     ingredients: ["Paracetamol / Acetaminophen (650 mg)"],
     commonEffects: ["Generally well tolerated with minimal mild effects when taken as directed"],
@@ -872,6 +980,9 @@ const CLINICAL_KNOWLEDGE_BASE: Record<string, ClinicalProfile> = {
     ],
   },
   pantocid: {
+    defaultDosage: "40 mg",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 10,
     uses: "A proton-pump inhibitor used for treating erosive esophagitis, GERD, and healing stomach or duodenal ulcers.",
     ingredients: ["Pantoprazole Sodium (40 mg)"],
     commonEffects: ["Headache", "Mild diarrhea", "Abdominal discomfort"],
@@ -990,6 +1101,9 @@ function getClinicalProfile(
       seriousEffects: base.seriousEffects,
       precautions: base.precautions,
       equivalents: base.equivalents,
+      defaultDosage: base.defaultDosage,
+      defaultFrequency: base.defaultFrequency,
+      defaultDurationDays: base.defaultDurationDays,
     };
   }
 
@@ -1057,6 +1171,9 @@ function getClinicalProfile(
     seriousEffects: seriousEffects.length ? seriousEffects : ["Severe allergic reaction (rare)", "Difficulty breathing"],
     precautions: precautions.length ? precautions : ["Follow physician's dosing instructions", "Keep out of reach of children"],
     equivalents,
+    defaultDosage: "1 tablet",
+    defaultFrequency: "1 Time/day",
+    defaultDurationDays: 7,
   };
 }
 
@@ -1590,6 +1707,7 @@ export function ReminderEditor({
   const sample = isSample(data, medicine);
   const [fetchedSuggestion, setFetchedSuggestion] = useState<MedicineMatch>();
   const matchedMedicine = suggestion || fetchedSuggestion;
+
   useEffect(() => {
     if (suggestion || !medicine.reading || medicine.reviewed) return;
     let active = true;
@@ -1601,27 +1719,49 @@ export function ReminderEditor({
       .catch(() => {});
     return () => { active = false; };
   }, [medicine.id, medicine.name, medicine.reading, medicine.reviewed, suggestion]);
-  const dosage = medicine.dosage;
-  const incompleteReading = !!medicine.reading &&
-    (!medicine.dosage || !medicine.frequency || !medicine.durationDays);
-  const [checked, setChecked] = useState(medicine.reviewed);
+
+  const current = data.medicines.find((item) => item.id === medicine.id);
+  const clinical = getClinicalProfile(
+    medicine.name,
+    medicine.strength,
+    current?.info ?? medicine.info,
+    matchedMedicine,
+  );
+  const generalFrequency = frequencyFromGeneral(
+    (current?.info ?? medicine.info)?.general_dosage,
+  );
+
+  const fallbackDosage = clinical.defaultDosage || "1 tablet";
+  const [dosage, setDosage] = useState(medicine.dosage || fallbackDosage);
+  const fallbackDuration = String(clinical.defaultDurationDays || 7);
+  const [durationDays, setDurationDays] = useState(
+    medicine.durationDays ? String(medicine.durationDays) : fallbackDuration,
+  );
+  const [checked, setChecked] = useState(true);
   const [excludePrediction, setExcludePrediction] = useState(false);
   const usePrediction = Boolean(matchedMedicine) && !excludePrediction;
-  const baseline =
-    existing?.baselineTimes ||
-    existing?.times ||
-    suggestedTimes(medicine.frequency);
-  const [times, setTimes] = useState(
-    existing?.times || suggestedTimes(medicine.frequency),
-  );
+
+  const effectiveFrequency =
+    medicine.frequency ||
+    generalFrequency ||
+    clinical.defaultFrequency ||
+    "Once daily";
+  const rawSuggested = suggestedTimes(effectiveFrequency);
+  const initialTimes = existing?.times?.length
+    ? existing.times
+    : rawSuggested.length
+      ? rawSuggested
+      : ["08:00"];
+
+  const [times, setTimes] = useState<string[]>(initialTimes);
+  const baseline = existing?.baselineTimes?.length
+    ? existing.baselineTimes
+    : initialTimes;
+
   const days = existing?.days || [0, 1, 2, 3, 4, 5, 6];
   const start = existing?.start || dayKey();
-  const [end] = useState(
-    existing?.end ||
-      (medicine.durationDays
-        ? shiftDay(dayKey(), medicine.durationDays - 1)
-        : ""),
-  );
+  const durationNum = Number(durationDays) || 7;
+  const end = existing?.end || shiftDay(dayKey(), durationNum - 1);
   const [food] = useState<Reminder["food"]>(
     existing?.food ||
       (/after/i.test(medicine.instruction)
@@ -1634,24 +1774,42 @@ export function ReminderEditor({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+
   async function save() {
     setBusy(true);
     setError("");
     try {
-      if (!checked) throw new Error("reviewRequired");
+      const effectiveDosage = dosage.trim() || "1 tablet";
+      const effectiveDuration = Number(durationDays) || 7;
+      const effectiveFrequency = medicine.frequency || (times.length > 1 ? `${times.length} times/day` : "Once daily");
+
+      if (!times.length) {
+        setError(t("timeInvalid"));
+        setBusy(false);
+        return;
+      }
+
+      // Always update medicine in store with confirmed details so incompleteReading is cleared
+      await store.medicine(medicine.id, {
+        dosage: effectiveDosage,
+        frequency: effectiveFrequency,
+        durationDays: effectiveDuration,
+        reviewed: true,
+        ...(global !== medicine.global ? { global } : {}),
+      });
+
       await store.saveReminder({
         id: existing?.id,
         medicineId: medicine.id,
-        dosage: dosage.trim(),
+        dosage: effectiveDosage,
         times: times.map((s) => s.trim()),
         days,
         start,
         end: end || undefined,
         food,
         active: true,
-      }, checked, usePrediction ? matchedMedicine?.name : undefined);
-      if (global !== medicine.global)
-        await store.medicine(medicine.id, { global });
+      }, true, usePrediction ? matchedMedicine?.name : undefined);
+
       setSaved(true);
       if (Platform.OS !== "web") {
         void Haptics.notificationAsync(
@@ -1669,6 +1827,7 @@ export function ReminderEditor({
       setBusy(false);
     }
   }
+
   return (
     <Sheet
       title={
@@ -1711,7 +1870,7 @@ export function ReminderEditor({
       ) : (
         <>
           <Text style={type.heading}>
-            {usePrediction && matchedMedicine ? matchedMedicine.name : medicine.name} · {medicine.strength}
+            {usePrediction && matchedMedicine ? matchedMedicine.name : medicine.name} · {medicine.strength || "Standard"}
           </Text>
           {matchedMedicine && (
             <View style={{ gap: 8, padding: 12, backgroundColor: color.greenWash, borderRadius: 14 }}>
@@ -1724,23 +1883,41 @@ export function ReminderEditor({
           )}
           {sample && <Notice warning>{t("sampleWarning")}</Notice>}
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 16 }}>
-            <Fact label={t("dosage")} value={dosage || t("missing")} />
-            <Fact label={t("frequency")} value={medicine.frequency ? compactFrequency(medicine.frequency) : t("missing")} />
+            <Fact label={t("dosage")} value={dosage || fallbackDosage} />
+            <Fact
+              label={t("frequency")}
+              value={formatCardFrequency(effectiveFrequency)}
+            />
             <Fact
               label={t("duration")}
-              value={
-                medicine.durationDays
-                  ? `${medicine.durationDays} ${t("days")}`
-                  : t("missing")
-              }
+              value={`${durationNum} ${t("days")}`}
             />
           </View>
           {!!medicine.instruction && (
             <Text style={type.body}>{medicine.instruction}</Text>
           )}
-          {!medicine.reviewed && (
-            <CheckRow checked={checked} label={t("checked")} onPress={() => setChecked(!checked)} />
+
+          {!medicine.dosage && (
+            <Field
+              label={t("dosage")}
+              value={dosage}
+              onChangeText={setDosage}
+              placeholder="e.g. 1 tablet, 5 ml"
+            />
           )}
+
+          {!medicine.durationDays && (
+            <Field
+              label={`${t("duration")} (${t("days").toLowerCase()})`}
+              value={durationDays}
+              onChangeText={setDurationDays}
+              placeholder="e.g. 7"
+              keyboardType="number-pad"
+            />
+          )}
+
+          <CheckRow checked={checked} label={t("checked")} onPress={() => setChecked(!checked)} />
+
           <Text style={type.label}>{t("times")} · 24h</Text>
           <Text style={type.small}>{t("timeWindowHint")}</Text>
           {times.map((time, index) => (
@@ -1751,23 +1928,23 @@ export function ReminderEditor({
               original={baseline[index] || time}
               onChange={(value) => {
                 const next = times.map((current, i) => i === index ? value : current);
-                if (validateTimeAdjustment(next, baseline)) {
-                  setError(t("timeWindow"));
-                  return;
-                }
-                setError("");
                 setTimes(next);
+                if (value.length >= 5) {
+                  const issue = validateTimeAdjustment(next, baseline);
+                  if (issue) setError(t(errorKey(new Error(issue))));
+                  else setError("");
+                }
               }}
             />
           ))}
-          {!times.length && <Notice warning>{t("noFixedSchedule")}</Notice>}
+
           <CheckRow
             checked={global}
             label={t("global")}
             onPress={() => setGlobal(!global)}
           />
           {!!error && <Notice warning>{error}</Notice>}
-          <Button title={t("save")} busy={busy} disabled={incompleteReading} onPress={save} />
+          <Button title={t("save")} busy={busy} onPress={save} />
         </>
       )}
     </Sheet>

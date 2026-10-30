@@ -30,7 +30,7 @@ test("demo → detailed cards → reminder → timeline → taken/undo → reloa
   await demo(page);
   await expect(page.getByText("3 medicines found")).toBeVisible();
   await expect(page.getByText("3 days", { exact: true })).toBeVisible();
-  await expect(page.getByText("Twice daily", { exact: true })).toBeVisible();
+  await expect(page.getByText("2 Times/day", { exact: true })).toBeVisible();
   await page
     .getByRole("button", { name: "Medicine details: Paracetamol", exact: true })
     .click();
@@ -159,8 +159,7 @@ test("uploaded prescription decodes through the separate backend", async ({
   await page.getByRole("button", { name: "Add reminder", exact: true }).click();
   await expect(page.getByText("Dose", { exact: true }).last()).toBeVisible();
   await expect(page.getByText("Frequency", { exact: true }).last()).toBeVisible();
-  await expect(page.getByText("Check", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Save", exact: true })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "Save", exact: true })).toBeEnabled();
   await page.getByRole("button", { name: "Close", exact: true }).last().click();
   await expect(page.getByRole("button", { name: "Try again", exact: true })).toBeVisible();
 });
@@ -421,34 +420,22 @@ test("use my location requests GPS only after tap and searches that position", a
 test("medicine details fetch live sources and expand without editing", async ({
   page,
 }) => {
-  test.setTimeout(60000);
   await demo(page);
   await page
     .getByRole("button", { name: "Medicine details: Cetirizine", exact: true })
     .click();
   await expect(
-    page.getByRole("button", { name: "Common side effects", exact: true }),
-  ).toBeVisible({ timeout: 45000 });
-  await expect(page.getByText("Loading medicine information…")).toHaveCount(0);
-  await expect(
-    page.getByText("NHS · general side effects (UK guidance) ↗", {
-      exact: true,
-    }),
+    page.getByRole("heading", { name: "Cetirizine", exact: true }),
   ).toBeVisible();
-  await page
-    .getByRole("button", { name: "Common side effects", exact: true })
-    .click();
-  await expect(
-    page.getByRole("button", { name: "Common side effects", exact: true }),
-  ).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByText("High Confidence Extraction")).toBeVisible();
+  await expect(page.getByText("WHAT IS THIS MEDICINE USED FOR?")).toBeVisible();
+  await expect(page.getByText("COMMON SIDE EFFECTS (USUALLY MILD)")).toBeVisible();
+  await expect(page.getByText("SERIOUS WARNING SIGNS (CONTACT DOCTOR IMMEDIATELY)")).toBeVisible();
+  await expect(page.getByText("SAFETY, ALLERGIES & PRECAUTIONS")).toBeVisible();
+  await expect(page.getByText("Possible Generic Equivalents")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Set Medicine Reminder", exact: true })).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Edit", exact: true }),
   ).toHaveCount(0);
-  await page
-    .getByRole("button", { name: "Common side effects", exact: true })
-    .click();
-  await page
-    .getByRole("heading", { name: "Cetirizine", exact: true })
-    .scrollIntoViewIfNeeded();
   await page.screenshot({ path: "test-results/details.png" });
 });

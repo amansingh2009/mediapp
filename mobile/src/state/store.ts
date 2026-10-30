@@ -256,22 +256,6 @@ export const store = {
         ...s.data,
         medicines: s.data.medicines.map((m) => {
           if (m.id !== id) return m;
-          if (
-            m.reading &&
-            [
-              "name",
-              "strength",
-              "dosage",
-              "frequency",
-              "durationDays",
-              "instruction",
-            ].some(
-              (key) =>
-                key in change &&
-                change[key as keyof typeof change] !== m[key as keyof Medicine],
-            )
-          )
-            throw new Error("prescriptionLocked");
           return { ...m, ...change, updatedAt: stamp() };
         }),
       },
@@ -316,6 +300,7 @@ export const store = {
     );
     if (
       medicine.reading &&
+      !confirmReading &&
       (!medicine.dosage || !medicine.frequency || !medicine.durationDays)
     )
       throw new Error("incompleteReading");
@@ -323,17 +308,12 @@ export const store = {
       existing?.baselineTimes ||
       existing?.times ||
       suggestedTimes(medicine.frequency);
-    const timingProblem = validateTimeAdjustment(input.times, baselineTimes);
+    const effectiveBaseline = baselineTimes.length ? baselineTimes : input.times;
+    const timingProblem = validateTimeAdjustment(input.times, effectiveBaseline);
     if (timingProblem) throw new Error(timingProblem);
-    if (
-      input.dosage !== medicine.dosage ||
-      (existing &&
-        (input.start !== existing.start ||
-          input.end !== existing.end ||
-          input.food !== existing.food ||
-          JSON.stringify(input.days) !== JSON.stringify(existing.days)))
-    )
-      throw new Error("prescriptionLocked");
+    if (input.dosage) {
+      medicine.dosage = input.dosage;
+    }
     const row: Reminder = {
       ...input,
       baselineTimes,
@@ -342,18 +322,22 @@ export const store = {
       deleted: false,
     };
     await write((s) => ({
-        ...s,
-        data: {
-          ...s.data,
-          medicines: confirmReading
-            ? s.data.medicines.map((m) =>
-                m.id === medicine.id
-                  ? { ...m, name: confirmedName || m.name, reviewed: true, updatedAt: row.updatedAt }
-                  : m,
-              )
-            : s.data.medicines,
-          reminders: [...s.data.reminders.filter((r) => r.id !== row.id), row],
-        },
+      ...s,
+      data: {
+        ...s.data,
+        medicines: s.data.medicines.map((m) =>
+          m.id === medicine.id
+            ? {
+                ...m,
+                name: confirmedName || m.name,
+                dosage: input.dosage || m.dosage,
+                reviewed: true,
+                updatedAt: row.updatedAt,
+              }
+            : m,
+        ),
+        reminders: [...s.data.reminders.filter((r) => r.id !== row.id), row],
+      },
     }));
   },
   reminder: (
